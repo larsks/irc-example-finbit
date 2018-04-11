@@ -1,0 +1,22 @@
+  - name: Grouping node(s)
+    group_by: key=node_{{ node }}
+
+  - name: Creating Cluster for RedisLab via REST API
+    debug:
+      msg: "creating cluster"
+    delegate_to: localhost
+    when: node == 'node1'
+ 
+  - name: Check Cluster creation status
+    debug:
+      msg: "waiting for cluster create to complete"
+    delegate_to: localhost
+    register: cluster_creation_status
+    until: true
+ 
+  - name: Join Cluster for RedisLab via REST API
+    debug:
+      msg: "joining cluster"
+    delegate_to: localhost
+    when: node != 'node1'
+ 
